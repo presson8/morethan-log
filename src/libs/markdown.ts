@@ -9,42 +9,43 @@ function escapeHtml(value: string) {
 
 function inlineMarkdown(value: string) {
   let html = escapeHtml(value)
-  html = html.replace(/!\\[([^\\]]*)\\]\\((https?:\\/\\/[^\\s)]+)\\)/g, '<img src="$2" alt="$1" />')
-  html = html.replace(/\\[([^\\]]+)\\]\\((https?:\\/\\/[^\\s)]+)\\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
-  html = html.replace(/\\[([^\\]]+)\\]\\((\\/[^\\s)]+)\\)/g, '<a href="$2">$1</a>')
-  html = html.replace(/\`([^\`]+)\`/g, "<code>$1</code>")
-  html = html.replace(/\\*\\*([^*]+)\\*\\*/g, "<strong>$1</strong>")
+  html = html.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, '<img src="$2" alt="$1" />')
+  html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
+  html = html.replace(/\[([^\]]+)\]\((\/[^\s)]+)\)/g, '<a href="$2">$1</a>')
+  html = html.replace(new RegExp(String.fromCharCode(96) + "([^" + String.fromCharCode(96) + "]+)" + String.fromCharCode(96), "g"), "<code>$1</code>")
+  html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
   html = html.replace(/__([^_]+)__/g, "<strong>$1</strong>")
-  html = html.replace(/\\*([^*]+)\\*/g, "<em>$1</em>")
+  html = html.replace(/\*([^*]+)\*/g, "<em>$1</em>")
   return html
 }
 
 export function renderMarkdown(source: string) {
-  const lines = source.replace(/\\r/g, "").split("\n")
+  const lines = source.replace(/\r/g, "").split("\n")
   const output: string[] = []
   let paragraph: string[] = []
   let listTag: "ul" | "ol" | null = null
   let code: string[] | null = null
+  const fence = String.fromCharCode(96).repeat(3)
 
   const closeList = () => {
     if (listTag) {
-      output.push(`</${listTag}>`)
+      output.push("</" + listTag + ">")
       listTag = null
     }
   }
   const closeParagraph = () => {
     if (paragraph.length) {
-      output.push(`<p>${paragraph.map(inlineMarkdown).join("<br />")}</p>`)
+      output.push("<p>" + paragraph.map(inlineMarkdown).join("<br />") + "</p>")
       paragraph = []
     }
   }
 
   lines.forEach((line) => {
-    if (line.startsWith("```")) {
+    if (line.startsWith(fence)) {
       closeParagraph()
       closeList()
       if (code) {
-        output.push(`<pre><code>${escapeHtml(code.join("\n"))}</code></pre>`)
+        output.push("<pre><code>" + escapeHtml(code.join("\n")) + "</code></pre>")
         code = null
       } else {
         code = []
@@ -61,41 +62,41 @@ export function renderMarkdown(source: string) {
       return
     }
 
-    const heading = line.match(/^(#{1,6})\\s+(.+)$/)
+    const heading = line.match(/^(#{1,6})\s+(.+)$/)
     if (heading) {
       closeParagraph()
       closeList()
       const level = heading[1].length
-      output.push(`<h${level}>${inlineMarkdown(heading[2])}</h${level}>`)
+      output.push("<h" + level + ">" + inlineMarkdown(heading[2]) + "</h" + level + ">")
       return
     }
 
-    const quote = line.match(/^>\\s?(.*)$/)
+    const quote = line.match(/^>\s?(.*)$/)
     if (quote) {
       closeParagraph()
       closeList()
-      output.push(`<blockquote>${inlineMarkdown(quote[1])}</blockquote>`)
+      output.push("<blockquote>" + inlineMarkdown(quote[1]) + "</blockquote>")
       return
     }
 
-    if (/^([-*_])(?:\\s*\\1){2,}\\s*$/.test(line)) {
+    if (/^([-*_])(?:\s*\1){2,}\s*$/.test(line)) {
       closeParagraph()
       closeList()
       output.push("<hr />")
       return
     }
 
-    const unordered = line.match(/^\\s*[-*+]\\s+(.+)$/)
-    const ordered = line.match(/^\\s*\\d+\\.\\s+(.+)$/)
+    const unordered = line.match(/^\s*[-*+]\s+(.+)$/)
+    const ordered = line.match(/^\s*\d+\.\s+(.+)$/)
     if (unordered || ordered) {
       closeParagraph()
       const nextTag = unordered ? "ul" : "ol"
       if (listTag !== nextTag) {
         closeList()
-        output.push(`<${nextTag}>`)
+        output.push("<" + nextTag + ">")
         listTag = nextTag
       }
-      output.push(`<li>${inlineMarkdown((unordered || ordered)![1])}</li>`)
+      output.push("<li>" + inlineMarkdown((unordered || ordered)![1]) + "</li>")
       return
     }
 
@@ -105,6 +106,6 @@ export function renderMarkdown(source: string) {
 
   closeParagraph()
   closeList()
-  if (code) output.push(`<pre><code>${escapeHtml(code.join("\n"))}</code></pre>`)
+  if (code) output.push("<pre><code>" + escapeHtml(code.join("\n")) + "</code></pre>")
   return output.join("\n")
 }
