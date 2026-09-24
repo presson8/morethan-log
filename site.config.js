@@ -1,40 +1,31 @@
 const CONFIG = {
-  // profile setting (required)
   profile: {
-    name: "morethanmin",
-    image: "/avatar.svg", // If you want to create your own notion avatar, check out https://notion-avatar.vercel.app
-    role: "frontend developer",
-    bio: "I develop everything using node.",
-    email: "morethanmin.dev@gmail.com",
-    linkedin: "morethanmin",
-    github: "morethanmin",
+    name: "Presson8",
+    image: "/avatar.svg",
+    role: "学习与生活记录",
+    bio: "记录学习、生活与值得分享的片段。",
+    email: "",
+    linkedin: "",
+    github: "presson8",
     instagram: "",
   },
   projects: [
     {
-      name: `morethan-log`,
-      href: "https://github.com/morethanmin/morethan-log",
+      name: "hellowen",
+      href: "https://github.com/presson8/hellowen",
     },
   ],
-  // blog setting (required)
   blog: {
-    title: "morethan-log",
-    description: "welcome to morethan-log!",
-    scheme: "dark", // 'light' | 'dark' | 'system'
+    title: "Hellowen",
+    description: "一个不依赖 Notion 的中文个人日志。",
+    scheme: "dark",
   },
 
-  // CONFIG configration (required)
-  link: "https://morethan-log.vercel.app",
-  since: 2022, // If leave this empty, current year will be used.
-  lang: "en-US", // ['en-US', 'zh-CN', 'zh-HK', 'zh-TW', 'ja-JP', 'es-ES', 'ko-KR']
-  ogImageGenerateURL: "https://og-image-korean.vercel.app", // The link to generate OG image, don't end with a slash
+  link: "https://github.com/presson8/morethan-log",
+  since: 2026,
+  lang: "zh-CN",
+  ogImageGenerateURL: "https://og-image-korean.vercel.app",
 
-  // notion configuration (required)
-  notionConfig: {
-    pageId: process.env.NOTION_PAGE_ID,
-  },
-
-  // plugin configuration (optional)
   googleAnalytics: {
     enable: false,
     config: {
@@ -65,11 +56,11 @@ const CONFIG = {
     enable: false,
     config: {
       host: "https://cusdis.com",
-      appid: "", // Embed Code -> data-app-id value
+      appid: "",
     },
   },
-  isProd: process.env.VERCEL_ENV === "production", // distinguish between development and production environment (ref: https://vercel.com/docs/environment-variables#system-environment-variables)
-  revalidateTime: 21600 * 7, // revalidate time for [slug], index
+  isProd: process.env.VERCEL_ENV === "production",
+  revalidateTime: 21600 * 7,
 }
 
 module.exports = { CONFIG }
