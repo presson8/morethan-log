@@ -18,7 +18,7 @@ const MarkdownRenderer: React.FC<Props> = ({ content }) => {
 export default MarkdownRenderer
 
 const StyledWrapper = styled.div`
-  color: ({ theme }) => theme.colors.gray12;
+  color: ${({ theme }) => theme.colors.gray12};
   font-size: 1rem;
   line-height: 1.85;
 
@@ -28,7 +28,7 @@ const StyledWrapper = styled.div`
   h4,
   h5,
   h6 {
-    color: ({ theme }) => theme.colors.gray12;
+    color: ${({ theme }) => theme.colors.gray12};
     font-weight: 700;
     line-height: 1.35;
     margin: 2rem 0 0.8rem;
@@ -43,19 +43,19 @@ const StyledWrapper = styled.div`
   ol { padding-left: 1.5rem; }
   li { margin: 0.35rem 0; }
   blockquote {
-    border-left: 3px solid ({ theme }) => theme.colors.gray8;
-    color: ({ theme }) => theme.colors.gray10;
+    border-left: 3px solid ${({ theme }) => theme.colors.gray8};
+    color: ${({ theme }) => theme.colors.gray10};
     margin: 1.25rem 0;
     padding-left: 1rem;
   }
   code {
-    background: ({ theme }) => theme.colors.gray6;
+    background: ${({ theme }) => theme.colors.gray6};
     border-radius: 0.35rem;
     font-size: 0.9em;
     padding: 0.15rem 0.35rem;
   }
   pre {
-    background: ({ theme }) => theme.colors.gray2;
+    background: ${({ theme }) => theme.colors.gray2};
     border-radius: 0.75rem;
     overflow-x: auto;
     padding: 1rem;
@@ -75,7 +75,7 @@ const StyledWrapper = styled.div`
   }
   hr {
     border: 0;
-    border-top: 1px solid ({ theme }) => theme.colors.gray7;
+    border-top: 1px solid ${({ theme }) => theme.colors.gray7};
     margin: 2rem 0;
   }
 `
