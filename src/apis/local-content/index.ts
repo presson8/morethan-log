@@ -12,17 +12,29 @@ function parseValue(value: string): string | string[] {
     try {
       return JSON.parse(trimmed)
     } catch {
-      return trimmed.slice(1, -1).split(",").map((item) => item.trim()).filter(Boolean)
+      return trimmed
+        .slice(1, -1)
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean)
     }
   }
   if (trimmed.includes(",")) {
-    return trimmed.split(",").map((item) => item.trim()).filter(Boolean)
+    return trimmed
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean)
   }
   return trimmed
 }
 
-function parseMarkdownFile(source: string) {
-  const match = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---\s*\r?\n?([\s\S]*)$/)
+function parseMarkdownFile(source: string): {
+  data: FrontMatter
+  content: string
+} {
+  const match = source.match(
+    /^---\s*\r?\n([\s\S]*?)\r?\n---\s*\r?\n?([\s\S]*)$/
+  )
   if (!match) return { data: {}, content: source }
 
   const data: FrontMatter = {}
